@@ -1,5 +1,27 @@
 package EngineTest;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector3f;
+
+import RenderEngine.DisplayManager;
+import RenderEngine.Loader;
+import RenderEngine.MasterRenderer;
+import RenderEngine.OBJLoader;
+import RenderEngine.EntityRenderer;
+import entities.Camera;
+import entities.Entity;
+import entities.Light;
+import shaders.StaticShader;
+import terrains.Terrain;
+import textures.ModelTexture;
+import models.TexturedModel;
+import models.rawModel;
+
 //
 //					  _oo0oo_
 //					 o8888888o
@@ -25,28 +47,6 @@ package EngineTest;
 //
 //	BUDDHA BLESS YOUR CODE TO BE BUG FREE
 //
-
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector3f;
-
-import RenderEngine.DisplayManager;
-import RenderEngine.Loader;
-import RenderEngine.MasterRenderer;
-import RenderEngine.OBJLoader;
-import RenderEngine.EntityRenderer;
-import entities.Camera;
-import entities.Entity;
-import entities.Light;
-import shaders.StaticShader;
-import terrains.Terrain;
-import textures.ModelTexture;
-import models.TexturedModel;
-import models.rawModel;
 
 public class MainGameLoop {
 
@@ -123,6 +123,8 @@ public class MainGameLoop {
 		
 		MasterRenderer renderer = new MasterRenderer();
 		
+		python.PyExecuter.main(null, "test.py");;
+		
 		while(!Display.isCloseRequested()) {
 			TreeEntity.increaseRotation(0, 1, 0);
 			camera.move();
@@ -150,5 +152,5 @@ public class MainGameLoop {
 
 }
 /*
- * Okay with the buddha.
+ * Okay with the Buddha.
  */
