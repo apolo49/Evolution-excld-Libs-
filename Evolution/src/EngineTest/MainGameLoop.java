@@ -123,7 +123,10 @@ public class MainGameLoop {
 		
 		MasterRenderer renderer = new MasterRenderer();
 		
-		python.PyExecuter.main(null, "test.py");;
+		
+		System.out.println("Generating DNA...");
+		python.PyExecuter.main(null, "test.py");
+		System.out.println("Done!");
 		
 		while(!Display.isCloseRequested()) {
 			TreeEntity.increaseRotation(0, 1, 0);
