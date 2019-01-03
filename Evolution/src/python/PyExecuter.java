@@ -19,6 +19,7 @@ public class PyExecuter {
                 System.out.println(s);
             }
             while ((s = stdError.readLine()) != null) {
+            	System.out.println("The system has caught an error in the python code:\n");
                 System.out.println(s);
             }
             

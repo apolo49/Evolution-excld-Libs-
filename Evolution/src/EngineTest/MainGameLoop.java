@@ -19,8 +19,13 @@ import entities.Light;
 import shaders.StaticShader;
 import terrains.Terrain;
 import textures.ModelTexture;
+import textures.TerrainTexture;
+import textures.TerrainTexturePack;
 import models.TexturedModel;
 import models.rawModel;
+import objParser.ModelData;
+import objParser.OBJFileLoader;
+import python.PyExecuter;
 
 //
 //					  _oo0oo_
@@ -56,8 +61,18 @@ public class MainGameLoop {
 		
 		Loader loader = new Loader();
 		
-
+		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grass"));
+		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("path"));
+		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("dirt"));
+		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("water"));
 		
+		TerrainTexturePack terrainTexturePack = new TerrainTexturePack(backgroundTexture,rTexture,gTexture,bTexture);
+		
+		System.out.println("Generating world map");
+		PyExecuter.main(null, "Mapper.py");
+		System.out.println("Map Generation Done!");
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("world\\worldMap"));
+
 		rawModel tree = OBJLoader.loadObjModel("Tree", loader);
 		ModelTexture treeTexture = new ModelTexture(loader.loadTexture("plain"));
 		treeTexture.setShineDamper(15);
@@ -83,12 +98,12 @@ public class MainGameLoop {
 		
 		Light light = new Light(new Vector3f(20000,20000,20000),new Vector3f(1,1,1));
 		
-		Terrain terrain = new Terrain(0,-1,loader,new ModelTexture(loader.loadTexture("grass")));
-		Terrain terrain2 = new Terrain(1,-1,loader,new ModelTexture(loader.loadTexture("grass")));
-		Terrain terrain3 = new Terrain(1,0,loader,new ModelTexture(loader.loadTexture("grass")));
-		Terrain terrain4 = new Terrain(0,0,loader,new ModelTexture(loader.loadTexture("grass")));
-		Terrain terrain5 = new Terrain(-1,0,loader,new ModelTexture(loader.loadTexture("grass")));
-		Terrain terrain6 = new Terrain(-1,-1,loader,new ModelTexture(loader.loadTexture("grass")));
+		Terrain terrain = new Terrain(0,-1,loader,terrainTexturePack,blendMap);
+		Terrain terrain2 = new Terrain(1,-1,loader,terrainTexturePack,blendMap);
+		Terrain terrain3 = new Terrain(1,0,loader,terrainTexturePack,blendMap);
+		Terrain terrain4 = new Terrain(0,0,loader,terrainTexturePack,blendMap);
+		Terrain terrain5 = new Terrain(-1,0,loader,terrainTexturePack,blendMap);
+		Terrain terrain6 = new Terrain(-1,-1,loader,terrainTexturePack,blendMap);
 		
 		Camera camera = new Camera();
 		
@@ -125,7 +140,7 @@ public class MainGameLoop {
 		
 		
 		System.out.println("Generating DNA...");
-		python.PyExecuter.main(null, "test.py");
+		PyExecuter.main(null, "test.py");
 		System.out.println("Done!");
 		
 		while(!Display.isCloseRequested()) {
