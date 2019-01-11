@@ -1,30 +1,23 @@
 package EngineTest;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
-
 import RenderEngine.DisplayManager;
 import RenderEngine.Loader;
 import RenderEngine.MasterRenderer;
 import RenderEngine.OBJLoader;
-import RenderEngine.EntityRenderer;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
-import shaders.StaticShader;
 import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 import models.TexturedModel;
 import models.rawModel;
-import objParser.ModelData;
-import objParser.OBJFileLoader;
 import python.PyExecuter;
 
 //
@@ -62,8 +55,8 @@ public class MainGameLoop {
 		Loader loader = new Loader();
 		
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grass"));
-		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("path"));
-		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("dirt"));
+		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("dirt"));
+		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("path"));
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("water"));
 		
 		TerrainTexturePack terrainTexturePack = new TerrainTexturePack(backgroundTexture,rTexture,gTexture,bTexture);
