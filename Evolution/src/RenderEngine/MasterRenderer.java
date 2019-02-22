@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
-
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
@@ -19,9 +17,9 @@ import terrains.Terrain;
 
 public class MasterRenderer {
 	
-	private static final float FOV = 70;
-	private static final float NEAR_PLANE = 0.1f;
-	private static final float FAR_PLANE = 1000;
+	private static final float FOV = 70; //size of field of view
+	private static final float NEAR_PLANE = 0.1f; //size of near plane
+	private static final float FAR_PLANE = 1000; //size of far plane rhombus
 	private static final float R = 0.5f;
 	private static final float G = 0.5f;
 	private static final float B = 0.5f;
