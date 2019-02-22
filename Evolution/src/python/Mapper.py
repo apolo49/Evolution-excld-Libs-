@@ -1,7 +1,7 @@
-from PIL import Image
+from lib.PIL import Image
 import random
 import os
-from noise import pnoise2 as perlin
+from lib.noise.noise import pnoise2 as perlin
 pixelColour = [[0,0,0],[255,0,0],[0,255,0],[0,0,255]]
 size = 2048
 octaves = 6

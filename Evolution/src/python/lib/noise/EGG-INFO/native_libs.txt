@@ -1,0 +1,2 @@
+noise/_perlin.cp37-win32.pyd
+noise/_simplex.cp37-win32.pyd
