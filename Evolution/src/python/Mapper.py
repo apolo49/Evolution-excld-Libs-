@@ -26,6 +26,6 @@ def drawImage():
     return testImage
 def main():
     finalImage = drawImage()
-    finalImage.save(os.path.abspath(__file__).strip("src\\pyhton\\Mapper.py")+"on\\res\\world\\worldMap.png")
+    finalImage.save(os.path.abspath(__file__).strip("src\\pyhton\\Mapper.py")+"on\\res\\textures\\world\\worldMap.png")
 if __name__ == "__main__":
     main()

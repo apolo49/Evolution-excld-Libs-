@@ -12,6 +12,7 @@ import RenderEngine.OBJLoader;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
+import entities.Player;
 import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
@@ -57,7 +58,7 @@ public class MainGameLoop {
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grass"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("dirt"));
 		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("path"));
-		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("water"));
+		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("dirt"));
 		
 		TerrainTexturePack terrainTexturePack = new TerrainTexturePack(backgroundTexture,rTexture,gTexture,bTexture);
 		
@@ -98,8 +99,6 @@ public class MainGameLoop {
 		Terrain terrain5 = new Terrain(-1,0,loader,terrainTexturePack,blendMap);
 		Terrain terrain6 = new Terrain(-1,-1,loader,terrainTexturePack,blendMap);
 		
-		Camera camera = new Camera();
-		
 		List<Entity> allTrees = new ArrayList<Entity>();
 		List<Entity> allGrasses = new ArrayList<Entity>();
 		Random random = new Random();
@@ -136,9 +135,20 @@ public class MainGameLoop {
 		PyExecuter.main(null, "test.py");
 		System.out.println("Done!");
 		
+		rawModel HumanModel = OBJLoader.loadObjModel("Human1", loader);
+		ModelTexture HumanTexture = new ModelTexture(loader.loadTexture("plain"));
+		HumanTexture.setShineDamper(15);
+		HumanTexture.setReflectivity(10);
+		TexturedModel Human = new TexturedModel(HumanModel,HumanTexture);
+		
+		Player player = new Player(Human, new Vector3f(100,0,-50), 0, 0, 0, 1);
+		Camera camera = new Camera(player);
+		
 		while(!Display.isCloseRequested()) {
 			TreeEntity.increaseRotation(0, 1, 0);
 			camera.move();
+			player.move();
+			renderer.processEntity(player);
 			//game logic
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);

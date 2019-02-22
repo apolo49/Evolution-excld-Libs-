@@ -8,7 +8,7 @@ public class PyExecuter {
 
         String s = null;
         String path = System.getProperty("user.dir").concat("\\src\\python\\").concat(file); //locates desired file to run
-        String in = "%localappdata%\\Programs\\Python\\Python37-32\\python.exe ".concat(path); //locates python.exe and builds command to run file
+        String in = System.getenv("LOCALAPPDATA")+"\\Programs\\Python\\Python37-32\\python.exe ".concat(path); //locates python.exe and builds command to run file (reason only windows enabled)
 
         try {
             Process p = Runtime.getRuntime().exec(in); //executes the command in windows directly
