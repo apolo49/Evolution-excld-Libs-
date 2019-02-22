@@ -58,12 +58,13 @@ public class MainGameLoop {
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grass"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("dirt"));
 		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("path"));
-		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("dirt"));
+		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("water"));
 		
 		TerrainTexturePack terrainTexturePack = new TerrainTexturePack(backgroundTexture,rTexture,gTexture,bTexture);
 		
 		System.out.println("Generating world map");
 		PyExecuter.main(null, "Mapper.py");
+		//PyExecuter.main(null, "heightMap.py");
 		System.out.println("Map Generation Done!");
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("world\\worldMap"));
 
@@ -92,12 +93,12 @@ public class MainGameLoop {
 		
 		Light light = new Light(new Vector3f(20000,20000,20000),new Vector3f(1,1,1));
 		
-		Terrain terrain = new Terrain(0,-1,loader,terrainTexturePack,blendMap);
-		Terrain terrain2 = new Terrain(1,-1,loader,terrainTexturePack,blendMap);
-		Terrain terrain3 = new Terrain(1,0,loader,terrainTexturePack,blendMap);
-		Terrain terrain4 = new Terrain(0,0,loader,terrainTexturePack,blendMap);
-		Terrain terrain5 = new Terrain(-1,0,loader,terrainTexturePack,blendMap);
-		Terrain terrain6 = new Terrain(-1,-1,loader,terrainTexturePack,blendMap);
+		Terrain terrain = new Terrain(0,-1,loader,terrainTexturePack,blendMap,"heightMap");
+		Terrain terrain2 = new Terrain(1,-1,loader,terrainTexturePack,blendMap,"heightMap");
+		Terrain terrain3 = new Terrain(1,0,loader,terrainTexturePack,blendMap,"heightMap");
+		Terrain terrain4 = new Terrain(0,0,loader,terrainTexturePack,blendMap,"heightMap");
+		Terrain terrain5 = new Terrain(-1,0,loader,terrainTexturePack,blendMap,"heightMap");
+		Terrain terrain6 = new Terrain(-1,-1,loader,terrainTexturePack,blendMap,"heightMap");
 		
 		List<Entity> allTrees = new ArrayList<Entity>();
 		List<Entity> allGrasses = new ArrayList<Entity>();

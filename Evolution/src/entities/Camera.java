@@ -52,12 +52,12 @@ public class Camera {
 		float offsetZ = (float) (horizDis * Math.cos(Math.toRadians(theta)));
 		position.x = player.getPosition().x - offsetX;
 		position.z = player.getPosition().z - offsetZ;
-		position.y = player.getPosition().y + vertDis;
+		position.y = player.getPosition().y + vertDis+ 6;
 	}
 	
 	private void calculateZoom() {
-		float zoomLevel = Mouse.getDWheel() * 0.1f;
-		distanceFromPlayer += zoomLevel;
+		float zoomLevel = Mouse.getDWheel() * 0.01f;
+		distanceFromPlayer -= zoomLevel;
 	}
 	
 	private void calculatePitch() {
