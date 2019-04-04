@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import RenderEngine.DisplayManager;
 import RenderEngine.Loader;
@@ -13,6 +14,8 @@ import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
+import guis.GUIRenderer;
+import guis.GUITexture;
 import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
@@ -64,7 +67,7 @@ public class MainGameLoop {
 		
 		System.out.println("Generating world map");
 		PyExecuter.main(null, "Mapper.py");
-		//PyExecuter.main(null, "heightMap.py");
+		PyExecuter.main(null, "heightMap.py");
 		System.out.println("Map Generation Done!");
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("world\\worldMap"));
 
@@ -91,35 +94,69 @@ public class MainGameLoop {
 		texturedGrass1.getTexture().setHasTransparency(true);
 		Entity grassEntity1 = new Entity(texturedGrass1,new Vector3f(0,0,-30),0,0,0,1);
 		
+		rawModel fern = OBJLoader.loadObjModel("fern", loader);
+		ModelTexture fernTexture = new ModelTexture(loader.loadTexture("fern"));
+		fernTexture.setNumberOfRows(4);
+		fernTexture.setShineDamper(15);
+		fernTexture.setReflectivity(10);
+		TexturedModel texturedFern = new TexturedModel(fern,fernTexture);
+		texturedFern.getTexture().setHasTransparency(true);
+		Entity FernEntity = new Entity(texturedFern,new Vector3f(0,0,-30),0,0,0,1);
+		
 		Light light = new Light(new Vector3f(20000,20000,20000),new Vector3f(1,1,1));
 		
-		Terrain terrain = new Terrain(0,-1,loader,terrainTexturePack,blendMap,"heightMap");
-		Terrain terrain2 = new Terrain(1,-1,loader,terrainTexturePack,blendMap,"heightMap");
-		Terrain terrain3 = new Terrain(1,0,loader,terrainTexturePack,blendMap,"heightMap");
-		Terrain terrain4 = new Terrain(0,0,loader,terrainTexturePack,blendMap,"heightMap");
-		Terrain terrain5 = new Terrain(-1,0,loader,terrainTexturePack,blendMap,"heightMap");
-		Terrain terrain6 = new Terrain(-1,-1,loader,terrainTexturePack,blendMap,"heightMap");
+		Terrain terrain = new Terrain(0,-1,loader,terrainTexturePack,blendMap,"heightMap.png");
+		Terrain terrain2 = new Terrain(1,-1,loader,terrainTexturePack,blendMap,"heightMap.png");
+		Terrain terrain3 = new Terrain(1,0,loader,terrainTexturePack,blendMap,"heightMap.png");
+		Terrain terrain4 = new Terrain(0,0,loader,terrainTexturePack,blendMap,"heightMap.png");
+		Terrain terrain5 = new Terrain(-1,0,loader,terrainTexturePack,blendMap,"heightMap.png");
+		Terrain terrain6 = new Terrain(-1,-1,loader,terrainTexturePack,blendMap,"heightMap.png");
+		List<Terrain> terrains = new ArrayList<Terrain>();
+		terrains.add(terrain);
+		terrains.add(terrain2);
+		terrains.add(terrain3);
+		terrains.add(terrain4);
+		terrains.add(terrain5);
+		terrains.add(terrain6);
 		
 		List<Entity> allTrees = new ArrayList<Entity>();
 		List<Entity> allGrasses = new ArrayList<Entity>();
 		Random random = new Random();
 		
-		for (int i =0; i < 200; i++) {
-			float x = random.nextFloat() * 800 -400;
-			float y = 0;
-			float z = random.nextFloat() * -600;
-			allTrees.add(new Entity(texturedTree,new Vector3f(x,y,z),0,0,0,3));
+		for(Terrain terrain1 : terrains) {
+			for (int i = 0; i < 100; i++) {
+				float x = random.nextInt((int) Terrain.getSize() ) + terrain1.getX();
+				float z = random.nextInt((int) Terrain.getSize() ) + terrain1.getZ();
+				float y = terrain1.getHeightOfTerrain(x, z);
+				allTrees.add(new Entity(texturedTree, new Vector3f(x, y, z),0, random.nextFloat() * 360, 0, 1));
+			}
 		}
-		for (int i =0; i < 200; i++) {
-			float x = random.nextFloat() * 800 -400;
-			float y = 0;
-			float z = random.nextFloat() * -600;
-			allGrasses.add(new Entity(texturedGrass,new Vector3f(x,y,z),0,0,0,3));
-			float x1 = random.nextFloat() * 800 -400;
-			float y1 = 0;
-			float z1 = random.nextFloat() * -600;
-			allGrasses.add(new Entity(texturedGrass1,new Vector3f(x1,y1,z1),0,0,0,3));
+		for(Terrain terrain1 :terrains){
+			for (int j =0; j < 200; j++) {
+				float x = random.nextInt((int) Terrain.getSize() ) + terrain1.getX();
+				float z = random.nextInt((int) Terrain.getSize() ) + terrain1.getZ();
+				float y = terrain1.getHeightOfTerrain(x, z);
+				allGrasses.add(new Entity(texturedGrass,new Vector3f(x,y,z),0,0,0,3));
+			}
 		}
+		for (Terrain terrain1 :terrains) {
+			for (int k=0; k<200; k++) {
+			float x = random.nextInt((int) Terrain.getSize() ) + terrain1.getX();
+			float z = random.nextInt((int) Terrain.getSize() ) + terrain1.getZ();
+			float y = terrain1.getHeightOfTerrain(x, z);
+				allGrasses.add(new Entity(texturedGrass1,new Vector3f(x,y,z),0,0,0,3));
+			}
+		}
+		
+		for (Terrain terrain1 :terrains) {
+			for (int k=0; k<200; k++) {
+			float x = random.nextInt((int) Terrain.getSize() ) + terrain1.getX();
+			float z = random.nextInt((int) Terrain.getSize() ) + terrain1.getZ();
+			float y = terrain1.getHeightOfTerrain(x, z);
+				allGrasses.add(new Entity(texturedFern,random.nextInt(16),new Vector3f(x,y,z),0,0,0,3));
+			}
+		}
+		
 		
 		List<Entity> allEntities = new ArrayList<Entity>();
 		for (Entity entity : allTrees) {
@@ -143,29 +180,44 @@ public class MainGameLoop {
 		TexturedModel Human = new TexturedModel(HumanModel,HumanTexture);
 		
 		Player player = new Player(Human, new Vector3f(100,0,-50), 0, 0, 0, 1);
+		allEntities.add(player);
 		Camera camera = new Camera(player);
+		
+		List<GUITexture> guis = new ArrayList<GUITexture>();
+		GUITexture gui = new GUITexture(loader.loadTexture("Evolution"),new Vector2f(0f,0.8f),new Vector2f(0.25f,0.5f));
+		guis.add(gui);
+		GUIRenderer guiRenderer = new GUIRenderer(loader);
+		
 		
 		while(!Display.isCloseRequested()) {
 			TreeEntity.increaseRotation(0, 1, 0);
 			camera.move();
-			player.move();
-			renderer.processEntity(player);
+			for(Terrain terrain1 : terrains) {
+				if(terrain1.getX() <= player.getPosition().x) { 
+					if(terrain1.getX() + Terrain.getSize() > player.getPosition().x) {
+						if(terrain1.getZ() <= player.getPosition().z) {
+							if(terrain1.getZ() + Terrain.getSize() > player.getPosition().z) {
+								player.move(terrain1);
+							}
+						}
+					}
+				}
+			}
 			//game logic
-			renderer.processTerrain(terrain);
-			renderer.processTerrain(terrain2);
-			renderer.processTerrain(terrain3);
-			renderer.processTerrain(terrain4);
-			renderer.processTerrain(terrain5);
-			renderer.processTerrain(terrain6);			
+			for(Terrain terrain1 : terrains) {
+				renderer.processTerrain(terrain1);
+			}
 			for (Entity entity : allEntities) {
 				renderer.processEntity(entity);
 			}
 			renderer.render(light, camera);
+			guiRenderer.render(guis);
 			DisplayManager.updateDisplay();
 			
 			
 		}
-
+		
+		guiRenderer.cleanUP();
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
