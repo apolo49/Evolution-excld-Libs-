@@ -1,5 +1,9 @@
 package EngineTest;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -53,6 +57,25 @@ import python.PyExecuter;
 public class MainGameLoop {
 
 	public static void main(String[] args) {
+		
+		PyExecuter.main(null, "hashtest.pyw");
+		BufferedReader LoggedIn;
+		try {
+			LoggedIn = new BufferedReader(new FileReader("src//python//obj//LoggedIn.flg"));
+			String Line;
+			Line = LoggedIn.readLine();
+			if (Line.contains("true")) {
+				System.out.println("Logged in");
+			}
+			else {
+				System.out.println(Line);
+				System.exit(0);
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.exit(-1);
+		}
 
 		DisplayManager.createDisplay();
 		
