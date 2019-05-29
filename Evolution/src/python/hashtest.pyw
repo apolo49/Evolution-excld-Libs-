@@ -2,8 +2,7 @@
 from hashlib import sha3_256
 from pickle import dump,HIGHEST_PROTOCOL,load
 from urllib.request import urlopen
-from os.path import abspath
-from PIL import Image as OpenImage,ImageTk
+from lib.PIL import Image as OpenImage,ImageTk
 from tkinter import Tk, BooleanVar,Label,Entry,Button,Checkbutton,CENTER
 import Locator
 #end imports
@@ -14,10 +13,6 @@ attempts = 0 #global variable attempts
 #entire code function to encapsulate the loop for the screen
 def main():
     #General Locator
-    LoggedInFile = open(Locator.main("src\\python\\obj\\LoggedIn.flg"),'w') #grab the path for the logged in file and write false to it
-    LoggedInFile.write("false") 
-    LoggedInFile.close() #Close the file
-
     def save_obj(obj, name): #to save an object and data type
         with open(Locator.main("src\\python\\obj\\"+ name + '.pkl'), 'wb') as f: #open the file as f and in overwrite binary mode
             dump(obj, f, HIGHEST_PROTOCOL) #dump the variable and its data to the file
@@ -31,6 +26,10 @@ def main():
         except:
             save_obj({},name) #create the file and make it empty
             load_obj(name)#load the file as an output is expected
+            
+    LoggedInFile = open(Locator.main("src\\python\\obj\\LoggedIn.flg"),'w') #grab the path for the logged in file and write false to it
+    LoggedInFile.write("false") 
+    LoggedInFile.close() #Close the file
 
     #End general Locator
 

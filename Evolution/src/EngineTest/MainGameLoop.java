@@ -9,6 +9,8 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -60,6 +62,8 @@ import python.PyExecuter;
 public class MainGameLoop {
 
 	public static void main(String[] args) {
+		boolean gamePaused = false;
+		boolean escWasNotDown = true;
 		File file = null;
 		file = Logger.create(0);
 		Logger.main("[INIT] Game started", 0, file);
@@ -77,7 +81,6 @@ public class MainGameLoop {
 				System.exit(0);
 			}
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			StringWriter sw = new StringWriter();
 			e1.printStackTrace(new PrintWriter(sw));
 			String exceptionAsString = sw.toString();
@@ -225,6 +228,22 @@ public class MainGameLoop {
 		
 		Logger.main("[HEALTHY] World loaded!", -1, file);
 		while(!Display.isCloseRequested()) {
+			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) && !gamePaused)
+	            gamePaused = !gamePaused;
+	        if(gamePaused) {
+	        	Logger.main("[HEALTHY] Game Paused", 0, file);
+	        	String Quit = Pause.main();
+	            if (Quit.contains("0")) {
+	            	gamePaused = false;
+	            }else if (Quit.contains("1")) {
+	            	break;
+	            }else{
+	            	Logger.main("[SEVERE] Has not landed from pause menu correctly!", -1, file);
+	            	Logger.main("[SEVERE] Expected 1 or 0 got "+Quit+" Instead", -1, file);
+	            	Logger.main("[SEVERE] System Closing", -1, file);
+	            	System.exit(-1);
+	            }
+	        }
 			TreeEntity.increaseRotation(0, 1, 0);
 			camera.move();
 			for(Terrain terrain1 : terrains) {
@@ -249,12 +268,14 @@ public class MainGameLoop {
 			guiRenderer.render(guis);
 			DisplayManager.updateDisplay();
 			
-			
 		}
 		
 		guiRenderer.cleanUP();
+		Logger.main("[HEALTHY] Cleaned up GUI", 0, file);
 		renderer.cleanUp();
+		Logger.main("[HEALTHY] Cleaned up Renderer", 0, file);
 		loader.cleanUp();
+		Logger.main("[HEALTHY] Cleaned up Loader", 0, file);
 		DisplayManager.closeDisplay();
 		Logger.main("[HEALTHY] Game ended correctly", -1, file);
 		

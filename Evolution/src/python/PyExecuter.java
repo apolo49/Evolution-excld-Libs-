@@ -19,10 +19,10 @@ public class PyExecuter {
             
             while ((s = stdInput.readLine()) != null) { //while loop for while there is an input stream
                 System.out.println(s); //prints input stream
+                output(s);
             }
             while ((s = stdError.readLine()) != null) { //while loop for while there is an error stream
-    			Logger.main("[SEVERE]"+s,-1,file1);
-                System.exit(-1);
+    			Logger.main("[SEVERE] "+s,-1,file1);
             }
             
         }
@@ -34,4 +34,8 @@ public class PyExecuter {
             System.exit(-1);
         }
     }
+	
+	public static String output(String s) {
+		return s;
+	}
 }

@@ -4,12 +4,12 @@ def main(end):
     for i in range(len(x)):
         x[i]=x[i]+"\\"
     x[len(x)-1]=x[len(x)-1].strip("\\")
-    for i in range(len(x)):
-        if x[(len(x)-1)-i] !="Evolution\\":
-            x.remove(x[(len(x)-1)-i])
+    length=len(x)-1
+    for i in range(length):
+        if x[length-i] !="Evolution\\":
+            x.remove(x[length-i])
         else:
             break
-    x.remove(x[len(x)-1])
     x.append(end)
     y=""
     for i in x:
