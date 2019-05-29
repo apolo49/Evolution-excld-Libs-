@@ -1,6 +1,6 @@
 from lib.PIL import Image
 import random
-import os
+import Locator
 from lib.noise.noise import pnoise2 as perlin
 pixelColour = [[0,0,0],[255,0,0],[0,255,0],[0,0,255]]
 size = 2048
@@ -12,7 +12,7 @@ def drawImage():
     pixel = testImage.load()
     for x in range(2048):
         for y in range(2048):
-            freq = 6*octaves
+            freq = 64*octaves
             gen= perlin(x / freq, y / freq, octaves,persistence,lacunarity,size,size,0)
             if gen <-0.4:
                 RGB = pixelColour[3]
@@ -26,6 +26,6 @@ def drawImage():
     return testImage
 def main():
     finalImage = drawImage()
-    finalImage.save(os.path.abspath(__file__).strip("src\\pyhton\\Mapper.py")+"on\\res\\textures\\world\\worldMap.png")
+    finalImage.save(Locator.main("res\\textures\\world\\worldMap.png"))
 if __name__ == "__main__":
     main()

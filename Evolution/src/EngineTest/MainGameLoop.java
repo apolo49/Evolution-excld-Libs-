@@ -1,9 +1,11 @@
 package EngineTest;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -20,6 +22,7 @@ import entities.Light;
 import entities.Player;
 import guis.GUIRenderer;
 import guis.GUITexture;
+import log.Logger;
 import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
@@ -57,7 +60,9 @@ import python.PyExecuter;
 public class MainGameLoop {
 
 	public static void main(String[] args) {
-		
+		File file = null;
+		file = Logger.create(0);
+		Logger.main("[INIT] Game started", 0, file);
 		PyExecuter.main(null, "hashtest.pyw");
 		BufferedReader LoggedIn;
 		try {
@@ -65,19 +70,23 @@ public class MainGameLoop {
 			String Line;
 			Line = LoggedIn.readLine();
 			if (Line.contains("true")) {
-				System.out.println("Logged in");
+				Logger.main("[HEALTHY] Logged in", 0, file);
 			}
 			else {
-				System.out.println(Line);
+				Logger.main("[SEVERE] Couldn't log in", -1, file);
 				System.exit(0);
 			}
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			StringWriter sw = new StringWriter();
+			e1.printStackTrace(new PrintWriter(sw));
+			String exceptionAsString = sw.toString();
+			Logger.main(exceptionAsString,-1,file);
 			System.exit(-1);
 		}
 
 		DisplayManager.createDisplay();
+		Logger.main("[HEALTHY] Display created", 0, file);
 		
 		Loader loader = new Loader();
 		
@@ -87,11 +96,12 @@ public class MainGameLoop {
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("water"));
 		
 		TerrainTexturePack terrainTexturePack = new TerrainTexturePack(backgroundTexture,rTexture,gTexture,bTexture);
+		Logger.main("[HEALTHY] Created textures", 0, file);
 		
 		System.out.println("Generating world map");
 		PyExecuter.main(null, "Mapper.py");
 		PyExecuter.main(null, "heightMap.py");
-		System.out.println("Map Generation Done!");
+		Logger.main("[HEALTHY] Map Generation Done!", 0, file);
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("world\\worldMap"));
 
 		rawModel tree = OBJLoader.loadObjModel("Tree", loader);
@@ -107,7 +117,6 @@ public class MainGameLoop {
 		grassTexture.setReflectivity(10);
 		TexturedModel texturedGrass = new TexturedModel(grass,grassTexture);
 		texturedGrass.getTexture().setHasTransparency(true);
-		Entity grassEntity = new Entity(texturedGrass,new Vector3f(0,0,-30),0,0,0,1);
 		
 		rawModel grass1 = OBJLoader.loadObjModel("grassModel", loader);
 		ModelTexture grassTexture1 = new ModelTexture(loader.loadTexture("grassTexture"));
@@ -115,7 +124,6 @@ public class MainGameLoop {
 		grassTexture1.setReflectivity(10);
 		TexturedModel texturedGrass1 = new TexturedModel(grass1,grassTexture1);
 		texturedGrass1.getTexture().setHasTransparency(true);
-		Entity grassEntity1 = new Entity(texturedGrass1,new Vector3f(0,0,-30),0,0,0,1);
 		
 		rawModel fern = OBJLoader.loadObjModel("fern", loader);
 		ModelTexture fernTexture = new ModelTexture(loader.loadTexture("fern"));
@@ -124,9 +132,9 @@ public class MainGameLoop {
 		fernTexture.setReflectivity(10);
 		TexturedModel texturedFern = new TexturedModel(fern,fernTexture);
 		texturedFern.getTexture().setHasTransparency(true);
-		Entity FernEntity = new Entity(texturedFern,new Vector3f(0,0,-30),0,0,0,1);
 		
 		Light light = new Light(new Vector3f(20000,20000,20000),new Vector3f(1,1,1));
+		Logger.main("[HEALTHY] Created entities", 0, file);
 		
 		Terrain terrain = new Terrain(0,-1,loader,terrainTexturePack,blendMap,"heightMap.png");
 		Terrain terrain2 = new Terrain(1,-1,loader,terrainTexturePack,blendMap,"heightMap.png");
@@ -141,6 +149,7 @@ public class MainGameLoop {
 		terrains.add(terrain4);
 		terrains.add(terrain5);
 		terrains.add(terrain6);
+		Logger.main("[HEALTHY] Created terrains", 0, file);
 		
 		List<Entity> allTrees = new ArrayList<Entity>();
 		List<Entity> allGrasses = new ArrayList<Entity>();
@@ -188,6 +197,7 @@ public class MainGameLoop {
 		for (Entity entity : allGrasses) {
 			allEntities.add(entity);
 		}
+		Logger.main("[HEALTHY] Populated world", 0, file);
 		
 		MasterRenderer renderer = new MasterRenderer();
 		
@@ -195,6 +205,7 @@ public class MainGameLoop {
 		System.out.println("Generating DNA...");
 		PyExecuter.main(null, "test.py");
 		System.out.println("Done!");
+		Logger.main("[HEALTHY] DNA Generation done!", 0, file);
 		
 		rawModel HumanModel = OBJLoader.loadObjModel("Human1", loader);
 		ModelTexture HumanTexture = new ModelTexture(loader.loadTexture("plain"));
@@ -205,13 +216,14 @@ public class MainGameLoop {
 		Player player = new Player(Human, new Vector3f(100,0,-50), 0, 0, 0, 1);
 		allEntities.add(player);
 		Camera camera = new Camera(player);
+		Logger.main("[HEALTHY] Created player, loading world", 0, file);
 		
 		List<GUITexture> guis = new ArrayList<GUITexture>();
 		GUITexture gui = new GUITexture(loader.loadTexture("Evolution"),new Vector2f(0f,0.8f),new Vector2f(0.25f,0.5f));
 		guis.add(gui);
 		GUIRenderer guiRenderer = new GUIRenderer(loader);
 		
-		
+		Logger.main("[HEALTHY] World loaded!", -1, file);
 		while(!Display.isCloseRequested()) {
 			TreeEntity.increaseRotation(0, 1, 0);
 			camera.move();
@@ -244,6 +256,7 @@ public class MainGameLoop {
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
+		Logger.main("[HEALTHY] Game ended correctly", -1, file);
 		
 	}
 

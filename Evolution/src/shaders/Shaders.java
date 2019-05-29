@@ -1,8 +1,11 @@
 package shaders;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -11,12 +14,15 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import log.Logger;
+
 
 public abstract class Shaders {
 	
 	private int programID;
 	private int vertexShaderID;
 	private int fragmentShaderID;
+	static File file1 = new File(System.getenv("APPDATA")+"\\Evolution\\logs\\Latest.txt");
 	
 	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 	
@@ -101,8 +107,11 @@ public abstract class Shaders {
 			}
 			reader.close();
 		}catch(IOException e) {
-			System.err.println("Could not read file!");
-			e.printStackTrace();
+			Logger.main("[SEVERE] Could not read file!",0,file1);
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			String exceptionAsString = sw.toString();
+			Logger.main(exceptionAsString,-1,file1);
 			System.exit(-1);
 		}
 		int shaderID = GL20.glCreateShader(type);
