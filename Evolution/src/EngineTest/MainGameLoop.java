@@ -9,7 +9,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
@@ -74,7 +73,7 @@ public class MainGameLoop {
 			String Line;
 			Line = LoggedIn.readLine();
 			if (Line.contains("true")) {
-				Logger.main("[HEALTHY] Logged in", 0, file);
+				Logger.main("[HEALTHY] Logged in", -1, file);
 			}
 			else {
 				Logger.main("[SEVERE] Couldn't log in", -1, file);
@@ -89,7 +88,7 @@ public class MainGameLoop {
 		}
 
 		DisplayManager.createDisplay();
-		Logger.main("[HEALTHY] Display created", 0, file);
+		Logger.main("[HEALTHY] Display created", -1, file);
 		
 		Loader loader = new Loader();
 		
