@@ -26,7 +26,7 @@ def main():
         except:
             save_obj({},name) #create the file and make it empty
             load_obj(name)#load the file as an output is expected
-            
+    print(load_obj("dic"))
     LoggedInFile = open(Locator.main("src\\python\\obj\\LoggedIn.flg"),'w') #grab the path for the logged in file and write false to it
     LoggedInFile.write("false") 
     LoggedInFile.close() #Close the file

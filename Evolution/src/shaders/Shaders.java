@@ -14,7 +14,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import log.Logger;
+import fileHandling.log.Logger;
 
 
 public abstract class Shaders {

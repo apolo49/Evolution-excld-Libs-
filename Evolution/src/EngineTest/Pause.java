@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import log.Logger;
+import fileHandling.log.Logger;
 import python.PyExecuter;
 
 public class Pause {
