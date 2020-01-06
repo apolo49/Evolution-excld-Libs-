@@ -23,6 +23,9 @@ public class Saves {
 				if (Files.isDirectory(Paths.get(System.getenv("APPDATA")+"\\Evolution\\saves")) == false) {
 					Files.createDirectories(Paths.get(System.getenv("APPDATA")+"\\Evolution\\saves"));
 				}
+				if (Files.isDirectory(Paths.get(System.getenv("APPDATA")+"\\Evolution\\flags and misc")) == false) {
+					Files.createDirectories(Paths.get(System.getenv("APPDATA")+"\\Evolution\\flags and misc"));
+				}
 			} catch (IOException e) {
 				StringWriter sw = new StringWriter();
 				e.printStackTrace(new PrintWriter(sw));

@@ -10,10 +10,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
-
 import RenderEngine.Loader;
 import RenderEngine.MasterRenderer;
 import RenderEngine.OBJLoader;
@@ -34,7 +32,7 @@ import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 
 public class CreateWorld {
-	public static void createNewWorld() {
+	public static void createNewWorld(String Name) {
 		File file = new File(System.getenv("APPDATA")+"\\Evolution\\logs\\Latest.txt");
 		
 		Loader loader = new Loader();
@@ -172,7 +170,12 @@ public class CreateWorld {
 		GUIRenderer guiRenderer = new GUIRenderer(loader);
 		
 		Logger.main("[HEALTHY] World loaded!", -1, file);
-		Saves.NewWorld(terrains);
+		if (!(Name == "New World")) {
+			Saves.NewWorld(Name,terrains);
+		}else {
+			Saves.NewWorld(terrains);
+		}
+		
 		Game.main(renderer, camera, terrains, player, allEntities, light, guiRenderer, guis);
 	}
 	
