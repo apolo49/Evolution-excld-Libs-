@@ -27,11 +27,7 @@ public class PyExecuter {
             
         }
         catch (IOException e) { //catches exception and stops the program to prevent breaks.
-        	StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			String exceptionAsString = sw.toString();
-			Logger.main(exceptionAsString,-1,file1);
-            System.exit(-1);
+        	Logger.IOSevereErrorHandler(e, file1);
         }
     }
 	

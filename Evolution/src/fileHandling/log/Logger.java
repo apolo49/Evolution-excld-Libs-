@@ -1,7 +1,10 @@
 package fileHandling.log;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,7 +27,6 @@ public class Logger {
 				Files.createDirectories(Paths.get(System.getenv("APPDATA")+"\\Evolution\\logs"));
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (tried == 0) {
@@ -45,7 +47,6 @@ public class Logger {
 				try {
 					Files.createFile(Paths.get(System.getenv("APPDATA")+"\\Evolution\\logs\\Latest.txt"));
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -80,5 +81,60 @@ public class Logger {
 			Files.write(path, strToBytes, StandardOpenOption.APPEND);
 		}
 	}
+	
+	public static void IOSevereErrorHandler(IOException e, File file) {
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+		String exceptionAsString = sw.toString();
+		main("[SEVERE]"+exceptionAsString,-1,file);
+		System.exit(-1);
+	}
+	
+	public static void NullPointerSevereErrorHandler(NullPointerException e, File file) {
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+		String exceptionAsString = sw.toString();
+		main("[SEVERE]"+exceptionAsString,-1,file);
+		System.exit(-1);
+	}
+	
+	public static void FileNotFoundSevereErrorHandler(FileNotFoundException e, File file) {
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+		String exceptionAsString = sw.toString();
+		main("[SEVERE]"+exceptionAsString,-1,file);
+		System.exit(-1);
+	}
 
+	public static void IOUnhealthyErrorHandler(IOException e, File file) {
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+		String exceptionAsString = sw.toString();
+		main("[UNHEALTHY]"+exceptionAsString,-1,file);
+		System.exit(-1);
+	}
+	
+	public static void NullPointerUnhealthyErrorHandler(NullPointerException e, File file) {
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+		String exceptionAsString = sw.toString();
+		main("[UNHEALTHY]"+exceptionAsString,-1,file);
+		System.exit(-1);
+	}
+	
+	public static void FileNotFoundUnhealthyErrorHandler(FileNotFoundException e, File file) {
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+		String exceptionAsString = sw.toString();
+		main("[UNHEALTHY]"+exceptionAsString,-1,file);
+		System.exit(-1);
+	}
+	
+	public static void UnhealthyException(Exception e, File file) {
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+		String exceptionAsString = sw.toString();
+		main("[UNHEALTHY]"+exceptionAsString,-1,file);
+		System.exit(-1);
+	}
 }

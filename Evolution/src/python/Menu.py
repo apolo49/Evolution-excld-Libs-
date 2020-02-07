@@ -3,10 +3,12 @@ from tkinter import Tk, BooleanVar,Label,Entry,Button,Checkbutton,CENTER,Listbox
 from hashlib import sha3_256
 import os
 import Locator
+import random
+import sys
 
 window = Tk()
-pathToImage = Locator.main("res\\textures\\Small Logo.png") #Find the small version of the logo
-img = ImageTk.PhotoImage(OpenImage.open(pathToImage).resize((256,82),OpenImage.ANTIALIAS)) #Resize the small logo
+#pathToImage = Locator.main("res\\textures\\Small Logo.png") #Find the small version of the logo
+#img = ImageTk.PhotoImage(OpenImage.open(pathToImage).resize((256,82),OpenImage.ANTIALIAS)) #Resize the small logo
 quitflag = open(os.getenv('APPDATA')+"\\Evolution\\flags and misc\\QuitFlag.flg",'w')
 quitflag.write("")
 quitflag.close()
@@ -93,6 +95,11 @@ def makeWorld(world,seed):
     quitflag.write("0")
     quitflag.close()
     SeedInfoflag = open(os.getenv('APPDATA')+"\\Evolution\\flags and misc\\SeedInfoFlag.flg",'w')
+    if seed == "World Seed" or seed == None or seed == "":
+        seed = random.randint(0,sys.maxsize)
+    elif seed.upper().isupper():
+        seed = round((int(sha3_256(seed.encode('utf-8')).hexdigest(),16)/13),0).as_integer_ratio()[0]*round((int(sha3_256(seed.encode('utf-8')).hexdigest(),16)/13),0).as_integer_ratio()[1]
+    seed=str(seed)
     SeedInfoflag.write(seed)
     SeedInfoflag.close()
     NewWorldflag = open(os.getenv('APPDATA')+"\\Evolution\\flags and misc\\NewWorldflag.flg",'w')
@@ -108,7 +115,9 @@ def play(world):
     quitflag.write("0")
     quitflag.close()
     SeedInfoflag = open(os.getenv('APPDATA')+"\\Evolution\\flags and misc\\SeedInfoFlag.flg",'w')
-    SeedInfoflag.write("")
+    SeedGrab = open(os.getenv("APPDATA")+"\\Evolution\\saves\\"+world+"\\maps\\seed.flg","r")
+    SeedInfoflag.write(SeedGrab.read())
+    SeedGrab.close()
     SeedInfoflag.close()
     NewWorldflag = open(os.getenv('APPDATA')+"\\Evolution\\flags and misc\\NewWorldflag.flg",'w')
     NewWorldflag.write("0")

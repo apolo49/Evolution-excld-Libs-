@@ -3,13 +3,12 @@ package EngineTest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import toolbox.Random;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import RenderEngine.Loader;
@@ -32,7 +31,7 @@ import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 
 public class CreateWorld {
-	public static void createNewWorld(String Name) {
+	public static void createNewWorld(String Name,BigInteger seed) {
 		File file = new File(System.getenv("APPDATA")+"\\Evolution\\logs\\Latest.txt");
 		
 		Loader loader = new Loader();
@@ -99,7 +98,7 @@ public class CreateWorld {
 		
 		List<Entity> allTrees = new ArrayList<Entity>();
 		List<Entity> allGrasses = new ArrayList<Entity>();
-		Random random = new Random();
+		Random random = new Random(seed);
 		
 		for(Terrain terrain1 : terrains) {
 			for (int i = 0; i < 100; i++) {
@@ -179,7 +178,7 @@ public class CreateWorld {
 		Game.main(renderer, camera, terrains, player, allEntities, light, guiRenderer, guis);
 	}
 	
-	public static void loadWorld(String worldName) {
+	public static void loadWorld(String worldName,BigInteger seed) {
 		File file = new File(System.getenv("APPDATA")+"\\Evolution\\logs\\Latest.txt");
 		
 		if(Files.isDirectory(Paths.get(System.getenv("APPDATA")+"\\Evolution\\saves\\"+worldName))) {
@@ -249,7 +248,7 @@ public class CreateWorld {
 
 				List<Entity> allTrees = new ArrayList<Entity>();
 				List<Entity> allGrasses = new ArrayList<Entity>();
-				Random random = new Random();
+				Random random = new Random(seed);
 
 				for(Terrain terrain1 : terrains) {
 					for (int i = 0; i < 100; i++) {
@@ -322,11 +321,7 @@ public class CreateWorld {
 				Logger.main("[HEALTHY] World loaded!", -1, file);
 				Game.main(renderer, camera, terrains, player, allEntities, light, guiRenderer, guis);
 			} catch (FileNotFoundException e) {
-				StringWriter sw = new StringWriter();
-				e.printStackTrace(new PrintWriter(sw));
-				String exceptionAsString = sw.toString();
-				Logger.main(exceptionAsString,-1,file);
-				System.exit(-1);
+				Logger.FileNotFoundSevereErrorHandler(e, file);
 			}
 		}else {
 			Logger.main("[FATAL] World file "+worldName+" Not Found.",0,file);

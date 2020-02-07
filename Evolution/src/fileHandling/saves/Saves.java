@@ -3,8 +3,6 @@ package fileHandling.saves;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -27,11 +25,7 @@ public class Saves {
 					Files.createDirectories(Paths.get(System.getenv("APPDATA")+"\\Evolution\\flags and misc"));
 				}
 			} catch (IOException e) {
-				StringWriter sw = new StringWriter();
-				e.printStackTrace(new PrintWriter(sw));
-				String exceptionAsString = sw.toString();
-				Logger.main(exceptionAsString,-1,logfile);
-	            System.exit(-1);
+				Logger.IOSevereErrorHandler(e, logfile);
 			}
 	}
 	
@@ -43,11 +37,7 @@ public class Saves {
 		try {
 			Files.createDirectory(Paths.get(System.getenv("APPDATA")+"\\Evolution\\saves\\"+worldName));
 		} catch (IOException e) {
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			String exceptionAsString = sw.toString();
-			Logger.main(exceptionAsString,-1,logfile);
-            System.exit(-1);
+			Logger.IOSevereErrorHandler(e, logfile);
 		}
 		main(worldName,terrains);
 	}
@@ -59,11 +49,7 @@ public class Saves {
 		try {
 			Files.createDirectory(Paths.get(System.getenv("APPDATA")+"\\Evolution\\saves\\"+worldName));
 		} catch (IOException e) {
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			String exceptionAsString = sw.toString();
-			Logger.main(exceptionAsString,-1,logfile);
-            System.exit(-1);
+			Logger.IOSevereErrorHandler(e, logfile);
 		}
 		main(worldName,terrains);
 	}
@@ -73,16 +59,14 @@ public class Saves {
 			Files.createDirectory(Paths.get(System.getenv("APPDATA")+"\\Evolution\\saves\\"+worldName+"\\maps"));
 			FileInputStream heightMap = new FileInputStream("res//textures//world//heightMap.png");
 			FileInputStream worldMap = new FileInputStream("res//textures//world//worldMap.png");
+			FileInputStream seed = new FileInputStream(System.getenv("APPDATA")+"\\Evolution\\flags and misc\\SeedInfoFlag.flg");
 			Files.copy(heightMap,Paths.get(System.getenv("APPDATA")+"\\Evolution\\saves\\"+worldName+"\\maps\\heightMap.png"),StandardCopyOption.REPLACE_EXISTING);
 			Files.copy(worldMap,Paths.get(System.getenv("APPDATA")+"\\Evolution\\saves\\"+worldName+"\\maps\\worldMap.png"),StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(seed,Paths.get(System.getenv("APPDATA")+"\\Evolution\\saves\\"+worldName+"\\maps\\seed.flg"),StandardCopyOption.REPLACE_EXISTING);
 			Files.createDirectory(Paths.get(System.getenv("APPDATA")+"\\Evolution\\saves\\"+worldName+"\\Entities"));
 			
 		} catch (IOException e) {
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			String exceptionAsString = sw.toString();
-			Logger.main(exceptionAsString,-1,logfile);
-            System.exit(-1);
+			Logger.IOSevereErrorHandler(e, logfile);
 		}
 	}
 

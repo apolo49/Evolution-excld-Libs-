@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -107,20 +105,14 @@ public abstract class Shaders {
 			}
 			reader.close();
 		}catch(IOException e) {
-			Logger.main("[SEVERE] Could not read file!",0,file1);
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			String exceptionAsString = sw.toString();
-			Logger.main(exceptionAsString,-1,file1);
-			System.exit(-1);
+			Logger.IOSevereErrorHandler(e, file1);
 		}
 		int shaderID = GL20.glCreateShader(type);
 		GL20.glShaderSource(shaderID, shaderSource);
 		GL20.glCompileShader(shaderID);
 		if(GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS)==GL11.GL_FALSE) {
-			System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));
-			System.err.println("Could not compile shader.");
-			System.exit(-1);
+			Logger.main("[SEVERE] Could not Compile Shader.", -1, file1);
+			Logger.main("[SEVERE]"+GL20.glGetShaderInfoLog(shaderID, 500), -1, file1);
 		}
 		return shaderID;
 	}

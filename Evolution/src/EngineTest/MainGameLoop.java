@@ -6,9 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import org.lwjgl.opengl.Display;
+import java.util.Random;
+
 import org.lwjgl.util.vector.Vector2f;
 import RenderEngine.DisplayManager;
 import RenderEngine.Loader;
@@ -17,8 +19,6 @@ import guis.GUIRenderer;
 import guis.GUITexture;
 import fileHandling.log.Logger;
 import fileHandling.saves.Saves;
-import textures.TerrainTexture;
-import textures.TerrainTexturePack;
 import python.PyExecuter;
 
 //
@@ -68,11 +68,7 @@ public class MainGameLoop {
 				System.exit(0);
 			}
 		} catch (IOException e1) {
-			StringWriter sw = new StringWriter();
-			e1.printStackTrace(new PrintWriter(sw));
-			String exceptionAsString = sw.toString();
-			Logger.main(exceptionAsString,-1,file);
-			System.exit(-1);
+			Logger.IOSevereErrorHandler(e1, file);
 		}
 		
 		PyExecuter.main(null, "Menu.py");
@@ -97,6 +93,22 @@ public class MainGameLoop {
 			Seed = new BufferedReader(new FileReader(System.getenv("APPDATA")+"\\Evolution\\flags and misc\\SeedInfoFlag.flg"));
 			String CurrentSeed;
 			CurrentSeed = Seed.readLine();
+			Seed.close();
+			Random random = new Random();
+			BigInteger seed = new BigInteger(Integer.MAX_VALUE , random); //return to fix
+			if (CurrentSeed == "" | CurrentSeed.contains("null")) {
+				seed = new BigInteger(seed.pow(16).bitLength(), random);
+			}else {
+				try {
+					seed = new BigInteger(CurrentSeed);
+				}catch (NumberFormatException e) {
+					StringWriter sw = new StringWriter();
+					e.printStackTrace(new PrintWriter(sw));
+					String exceptionAsString = sw.toString();
+					Logger.main(exceptionAsString,-1,file);
+					System.exit(-1);
+				}
+			}
 			
 			NewWorld = new BufferedReader(new FileReader(System.getenv("APPDATA")+"\\Evolution\\flags and misc\\NewWorldFlag.flg"));
 			String NewWorldFlag;
@@ -107,13 +119,6 @@ public class MainGameLoop {
 			
 			Loader loader = new Loader();
 			
-			TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grass"));
-			TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("dirt"));
-			TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("path"));
-			TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("water"));
-			
-			TerrainTexturePack terrainTexturePack = new TerrainTexturePack(backgroundTexture,rTexture,gTexture,bTexture);
-			Logger.main("[HEALTHY] Created textures", 0, file);
 			MasterRenderer renderer = new MasterRenderer();
 			List<GUITexture> guis = new ArrayList<GUITexture>();
 			GUITexture gui = new GUITexture(loader.loadTexture("Evolution"),new Vector2f(0f,0.8f),new Vector2f(0.25f,0.5f));
@@ -122,19 +127,15 @@ public class MainGameLoop {
 			
 			try {
 				if(!NewWorldFlag.contains("1")) {
-			 		CreateWorld.loadWorld(CurrentWorld);
+			 		CreateWorld.loadWorld(CurrentWorld,seed);
 		 		}else if(NewWorldFlag.contains("1")) {
-		 			CreateWorld.createNewWorld(CurrentWorld);
+		 			CreateWorld.createNewWorld(CurrentWorld,seed);
 		 		}else {
 		 			Logger.main("[FATAL] Not 1 or 0 in NewWorldFlag \n[FATAL] Shutting down.", -1, file);
 		 			System.exit(-1);
 		 		}
 			}catch (NullPointerException e) {
-				StringWriter sw = new StringWriter();
-				e.printStackTrace(new PrintWriter(sw));
-				String exceptionAsString = sw.toString();
-				Logger.main(exceptionAsString,-1,file);
-				System.exit(-1);
+				Logger.NullPointerSevereErrorHandler(e, file);
 			}
 			
 			guiRenderer.cleanUP();
@@ -147,11 +148,7 @@ public class MainGameLoop {
 			Logger.main("[HEALTHY] Game ended correctly", -1, file);
 			
 		} catch (IOException e1) {
-			StringWriter sw = new StringWriter();
-			e1.printStackTrace(new PrintWriter(sw));
-			String exceptionAsString = sw.toString();
-			Logger.main(exceptionAsString,-1,file);
-			System.exit(-1);
+			Logger.IOSevereErrorHandler(e1, file);
 		}
 		
 		

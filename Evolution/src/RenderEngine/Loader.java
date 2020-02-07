@@ -55,15 +55,9 @@ public class Loader {
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
 			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -1);
 		} catch (FileNotFoundException e) {
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			String exceptionAsString = sw.toString();
-			Logger.main(exceptionAsString,-1,file);
+			Logger.FileNotFoundUnhealthyErrorHandler(e, file);
 		} catch (IOException e) {
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			String exceptionAsString = sw.toString();
-			Logger.main(exceptionAsString,-1,file);
+			Logger.IOUnhealthyErrorHandler(e, file);
 		}
 		int textureID = texture.getTextureID();
 		textures.add(textureID);

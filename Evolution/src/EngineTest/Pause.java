@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import fileHandling.log.Logger;
 import python.PyExecuter;
 
@@ -19,13 +17,10 @@ public class Pause {
 			Quit_Type = new BufferedReader(new FileReader("src//python//obj//Quit_Type.txt"));
 			String Line;
 			Line = Quit_Type.readLine();
+			Quit_Type.close();
 			return Line;
 		}catch (IOException e) {
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			String exceptionAsString = sw.toString();
-			Logger.main("[SEVERE]"+exceptionAsString,-1,file);
-			System.exit(-1);
+			Logger.IOSevereErrorHandler(e,file);
 		}
 		return null;
 	}

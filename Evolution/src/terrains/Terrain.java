@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import RenderEngine.Loader;
+import fileHandling.log.Logger;
 import models.rawModel;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
@@ -18,6 +19,7 @@ public class Terrain {
 	private static final float SIZE = 800;
 	private static final float MAX_HEIGHT = 40;
 	private static final float MAX_PIXEL_COLOUR = (float) Math.pow(256, 3);
+	private static final File logFile = new File(System.getenv("APPDATA")+"\\Evolution\\logs\\Latest.txt");
 	
 	private float x;
 	private float z;
@@ -91,7 +93,7 @@ public class Terrain {
         try {
             image = ImageIO.read(HeightMap);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.IOSevereErrorHandler(e, logFile);
         }
 		int VERTEX_COUNT = image.getHeight();
 		heights = new float[VERTEX_COUNT][VERTEX_COUNT];
@@ -140,7 +142,7 @@ public class Terrain {
         try {
             image = ImageIO.read(HeightMap);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.IOSevereErrorHandler(e, logFile);
         }
 		int VERTEX_COUNT = image.getHeight();
 		heights = new float[VERTEX_COUNT][VERTEX_COUNT];

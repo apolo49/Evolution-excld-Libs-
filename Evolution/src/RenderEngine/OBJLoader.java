@@ -9,17 +9,17 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import fileHandling.log.Logger;
 import models.rawModel;
 
 public class OBJLoader {
-	
+	private static File file = new File(System.getenv("APPDATA")+"\\Evolution\\logs\\Latest.txt");
 	public static rawModel loadObjModel(String fileName, Loader loader) {
 		FileReader fr = null;
 		try {
 			fr = new FileReader(new File("res/objects/"+fileName+".obj"));
 		}catch (FileNotFoundException e) {
-			System.err.println("Couldn't load file!");
-			e.printStackTrace();
+			Logger.FileNotFoundUnhealthyErrorHandler(e, file);
 		}
 		BufferedReader reader = new BufferedReader(fr);
 		String line;
@@ -68,7 +68,7 @@ public class OBJLoader {
 			reader.close();
 			
 		}catch(Exception e) {
-			e.printStackTrace();
+			Logger.UnhealthyException(e,file);
 		}
 		verticesArray = new float[vertices.size()*3];
 		indicesArray = new int[indices.size()];
